@@ -1,0 +1,3167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduBot AI - Gemini Powered Student Study Assistant</title>
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    /* ==========================================================================
+       EduBot AI - Modern Student AI Study Assistant (Gemini 1.5 Flash Integrated)
+       ========================================================================== */
+
+    :root {
+      /* Light Theme */
+      --bg-app: #f8fafc;
+      --bg-sidebar: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --bg-input: #ffffff;
+      --bg-bubble-bot: #ffffff;
+      --bg-bubble-user: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+      --bg-code: #0f172a;
+      --bg-code-bar: #1e293b;
+      --bg-overlay: rgba(15, 23, 42, 0.5);
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-user-bubble: #ffffff;
+
+      --border-color: #e2e8f0;
+      --border-subtle: #f1f5f9;
+      --border-focus: #6366f1;
+
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-glow: rgba(79, 70, 229, 0.2);
+
+      --accent-emerald: #10b981;
+      --accent-emerald-bg: #ecfdf5;
+      --accent-amber: #f59e0b;
+      --accent-amber-bg: #fffbeb;
+      --accent-blue: #3b82f6;
+      --accent-blue-bg: #eff6ff;
+      --accent-violet: #8b5cf6;
+      --accent-violet-bg: #f5f3ff;
+      --accent-rose: #f43f5e;
+      --accent-rose-bg: #fff1f2;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+
+      --sidebar-width: 300px;
+      --header-height: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      /* Dark Theme */
+      --bg-app: #0a0d14;
+      --bg-sidebar: #0f1420;
+      --bg-card: #141b2d;
+      --bg-card-hover: #1c253d;
+      --bg-input: #141b2d;
+      --bg-bubble-bot: #141b2d;
+      --bg-bubble-user: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      --bg-code: #0a0d14;
+      --bg-code-bar: #161f36;
+      --bg-overlay: rgba(0, 0, 0, 0.7);
+
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #64748b;
+      --text-user-bubble: #ffffff;
+
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-subtle: rgba(255, 255, 255, 0.04);
+      --border-focus: #818cf8;
+
+      --primary: #6366f1;
+      --primary-hover: #818cf8;
+      --primary-light: rgba(99, 102, 241, 0.15);
+      --primary-glow: rgba(99, 102, 241, 0.35);
+
+      --accent-emerald: #34d399;
+      --accent-emerald-bg: rgba(16, 185, 129, 0.12);
+      --accent-amber: #fbbf24;
+      --accent-amber-bg: rgba(245, 158, 11, 0.12);
+      --accent-blue: #60a5fa;
+      --accent-blue-bg: rgba(59, 130, 246, 0.12);
+      --accent-violet: #a78bfa;
+      --accent-violet-bg: rgba(139, 92, 246, 0.12);
+      --accent-rose: #fb7185;
+      --accent-rose-bg: rgba(244, 63, 94, 0.12);
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 10px -1px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 12px 25px -4px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-app);
+      color: var(--text-primary);
+      font-size: 15px;
+      line-height: 1.6;
+      overflow: hidden;
+      transition: background-color var(--transition), color var(--transition);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    code, pre, kbd {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+      outline: none;
+      transition: all var(--transition);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    input, textarea, select {
+      font-family: inherit;
+      outline: none;
+      color: inherit;
+    }
+
+    /* Layout */
+    .app-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg-overlay);
+      backdrop-filter: blur(4px);
+      z-index: 90;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .sidebar-backdrop.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+      height: 100%;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform var(--transition);
+    }
+
+    .sidebar-header {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+    }
+
+    .logo-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .logo-text h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent-emerald);
+      background: var(--accent-emerald-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 2px;
+    }
+
+    .mobile-close-btn {
+      display: none;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+    }
+
+    .mobile-close-btn:hover {
+      background-color: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .sidebar-action {
+      padding: 14px 18px 6px;
+    }
+
+    .new-chat-btn {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: var(--radius-md);
+      background: var(--bg-bubble-user);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-md), 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+
+    .new-chat-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg), 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .new-chat-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .sidebar-section {
+      padding: 12px 18px;
+    }
+
+    .sidebar-section.flex-grow {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .clear-all-btn {
+      padding: 3px 6px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    .clear-all-btn:hover {
+      color: var(--accent-rose);
+      background-color: var(--bg-card-hover);
+    }
+
+    .clear-all-btn svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* Quick Prompts */
+    .quick-prompts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .quick-prompt-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    .quick-prompt-btn:hover {
+      background-color: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .prompt-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .prompt-icon svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .icon-emerald { color: var(--accent-emerald); background: var(--accent-emerald-bg); }
+    .icon-blue    { color: var(--accent-blue); background: var(--accent-blue-bg); }
+    .icon-amber   { color: var(--accent-amber); background: var(--accent-amber-bg); }
+    .icon-violet  { color: var(--accent-violet); background: var(--accent-violet-bg); }
+
+    /* Past Chats */
+    .chat-history-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding-right: 4px;
+    }
+
+    .chat-history-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-history-list::-webkit-scrollbar-thumb {
+      background-color: var(--border-color);
+      border-radius: var(--radius-full);
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .history-item:hover {
+      background-color: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .history-item.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .history-item-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .history-item-left svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .history-item-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .delete-chat-btn {
+      opacity: 0;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+    }
+
+    .history-item:hover .delete-chat-btn {
+      opacity: 1;
+    }
+
+    .delete-chat-btn:hover {
+      color: var(--accent-rose);
+      background-color: rgba(244, 63, 94, 0.1);
+    }
+
+    .delete-chat-btn svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .empty-history {
+      padding: 16px 10px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-style: italic;
+    }
+
+    /* API Key Box in Sidebar */
+    .sidebar-api-section {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border-subtle);
+      background-color: var(--bg-sidebar);
+    }
+
+    .api-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .api-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .api-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-primary);
+    }
+
+    .api-label svg {
+      width: 14px;
+      height: 14px;
+      color: var(--primary);
+    }
+
+    .key-status-chip {
+      font-size: 0.68rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .key-status-chip.set {
+      background: var(--accent-emerald-bg);
+      color: var(--accent-emerald);
+    }
+
+    .key-status-chip.unset {
+      background: var(--accent-rose-bg);
+      color: var(--accent-rose);
+    }
+
+    .api-input-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .api-key-input {
+      width: 100%;
+      padding: 7px 30px 7px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-app);
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-primary);
+    }
+
+    .api-key-input:focus {
+      border-color: var(--primary);
+    }
+
+    .toggle-pass-btn {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      padding: 4px;
+    }
+
+    .toggle-pass-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .toggle-pass-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .save-key-btn {
+      padding: 7px 12px;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .save-key-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .api-help-text {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .api-help-text a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .api-help-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* Main Area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      background-color: var(--bg-app);
+    }
+
+    /* Header */
+    .chat-header {
+      height: var(--header-height);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--bg-app);
+      z-index: 10;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .sidebar-toggle-btn {
+      display: none;
+      padding: 8px;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .sidebar-toggle-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .chat-title-info .active-chat-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .model-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: var(--radius-full);
+      background-color: var(--accent-emerald);
+      box-shadow: 0 0 6px var(--accent-emerald);
+    }
+
+    .model-name {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .gemini-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.7rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+    }
+
+    .theme-toggle-btn:hover {
+      background-color: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .theme-toggle-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    [data-theme="dark"] .light-icon { display: block; }
+    [data-theme="dark"] .dark-icon { display: none; }
+    [data-theme="light"] .light-icon { display: none; }
+    [data-theme="light"] .dark-icon { display: block; }
+
+    /* API Warning Banner */
+    .api-banner {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), rgba(99, 102, 241, 0.12));
+      border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .api-banner.hidden {
+      display: none;
+    }
+
+    .api-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .api-banner-left svg {
+      width: 16px;
+      height: 16px;
+      color: var(--accent-amber);
+      flex-shrink: 0;
+    }
+
+    .api-banner-btn {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    /* Message Viewport */
+    .messages-viewport {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+    }
+
+    .messages-viewport::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .messages-viewport::-webkit-scrollbar-thumb {
+      background-color: var(--border-color);
+      border-radius: var(--radius-full);
+    }
+
+    /* Welcome Screen */
+    .welcome-screen {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px 10px;
+      text-align: center;
+    }
+
+    .welcome-screen.hidden {
+      display: none;
+    }
+
+    .welcome-hero {
+      margin-bottom: 30px;
+    }
+
+    .bot-badge-icon {
+      width: 54px;
+      height: 54px;
+      margin: 0 auto 14px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+    }
+
+    .bot-badge-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .welcome-hero h2 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .welcome-hero p {
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .suggested-prompts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      text-align: left;
+    }
+
+    .sample-prompt-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .sample-prompt-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .card-content {
+      flex: 1;
+    }
+
+    .card-content h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .card-content p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .arrow-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .sample-prompt-card:hover .arrow-icon {
+      color: var(--primary);
+    }
+
+    /* Message Bubbles */
+    .messages-list {
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .message-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-row.user {
+      justify-content: flex-end;
+    }
+
+    .message-row.user .bubble {
+      background: var(--bg-bubble-user);
+      color: var(--text-user-bubble);
+      border-radius: 18px 18px 4px 18px;
+      padding: 12px 18px;
+      max-width: 78%;
+      box-shadow: var(--shadow-md);
+      font-size: 0.94rem;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .message-row.bot {
+      justify-content: flex-start;
+    }
+
+    .bot-avatar-col {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .bot-avatar-col svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .bot-message-wrapper {
+      max-width: 86%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .message-row.bot .bubble {
+      background-color: var(--bg-bubble-bot);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px 18px 18px 18px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
+      font-size: 0.94rem;
+      line-height: 1.65;
+    }
+
+    /* Markdown styling inside Bot message */
+    .bubble h1, .bubble h2, .bubble h3, .bubble h4 {
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 14px;
+      margin-bottom: 8px;
+    }
+
+    .bubble h1:first-child, .bubble h2:first-child, .bubble h3:first-child {
+      margin-top: 0;
+    }
+
+    .bubble h3 { font-size: 1.05rem; }
+    .bubble h4 { font-size: 0.96rem; }
+
+    .bubble p {
+      margin-bottom: 10px;
+    }
+
+    .bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    .bubble strong {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .bubble em {
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    .bubble ul, .bubble ol {
+      margin: 8px 0 10px 22px;
+    }
+
+    .bubble li {
+      margin-bottom: 5px;
+    }
+
+    .bubble blockquote {
+      border-left: 3px solid var(--primary);
+      padding: 6px 12px;
+      margin: 8px 0;
+      background-color: var(--primary-light);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .bubble code.inline-code {
+      background-color: var(--bg-card-hover);
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .code-block-wrapper {
+      margin: 12px 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-code);
+    }
+
+    .code-block-header {
+      background-color: var(--bg-code-bar);
+      padding: 7px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .copy-code-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #cbd5e1;
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .copy-code-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+    }
+
+    .code-block-wrapper pre {
+      padding: 14px;
+      overflow-x: auto;
+      color: #f8fafc;
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .error-card {
+      background-color: var(--accent-rose-bg);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: var(--accent-rose);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+    }
+
+    /* Action bar */
+    .bot-action-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-left: 4px;
+    }
+
+    .action-bar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      font-weight: 500;
+    }
+
+    .action-bar-btn:hover {
+      background-color: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .action-bar-btn svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* Typing Indicator */
+    .typing-indicator-row {
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 0;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .typing-indicator-row.hidden {
+      display: none;
+    }
+
+    .typing-bubble {
+      background-color: var(--bg-bubble-bot);
+      border: 1px solid var(--border-color);
+      padding: 10px 16px;
+      border-radius: 4px 16px 16px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .typing-text {
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .typing-dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--primary);
+      border-radius: var(--radius-full);
+      animation: bounceDot 1.4s infinite ease-in-out both;
+    }
+
+    .dot:nth-child(1) { animation-delay: -0.32s; }
+    .dot:nth-child(2) { animation-delay: -0.16s; }
+    .dot:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes bounceDot {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* Input Area */
+    .chat-input-container {
+      padding: 12px 24px 18px;
+      background-color: var(--bg-app);
+      max-width: 880px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .input-box-card {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: var(--radius-xl);
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+    }
+
+    .input-box-card:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: var(--shadow-lg), 0 0 0 3px var(--primary-glow);
+    }
+
+    textarea#chatTextarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-size: 0.94rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+      resize: none;
+      max-height: 150px;
+      min-height: 24px;
+      padding: 6px 4px;
+      overflow-y: auto;
+    }
+
+    textarea#chatTextarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    textarea#chatTextarea::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    textarea#chatTextarea::-webkit-scrollbar-thumb {
+      background-color: var(--border-color);
+      border-radius: var(--radius-full);
+    }
+
+    .send-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-full);
+      background: var(--bg-bubble-user);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .send-btn:not(:disabled):hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .send-btn svg {
+      width: 16px;
+      height: 16px;
+      margin-left: 2px;
+    }
+
+    .disclaimer-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .disclaimer-text svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* Toast */
+    .toast-notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-lg);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      z-index: 300;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .toast-notification.hidden {
+      display: none;
+    }
+
+    .toast-icon {
+      color: var(--accent-emerald);
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-toggle-btn {
+        display: flex;
+      }
+
+      .mobile-close-btn {
+        display: flex;
+      }
+
+      .suggested-prompts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .chat-header {
+        padding: 0 14px;
+      }
+
+      .messages-viewport {
+        padding: 16px 12px;
+      }
+
+      .chat-input-container {
+        padding: 8px 12px 14px;
+      }
+
+      .welcome-hero h2 {
+        font-size: 1.35rem;
+      }
+
+      .bot-message-wrapper {
+        max-width: 100%;
+      }
+
+      .message-row.user .bubble {
+        max-width: 90%;
+      }
+    }
+
+    /* ==================== STUDENT ONBOARDING PORTAL MODAL ==================== */
+    .student-portal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 15, 30, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+    }
+
+    .student-portal-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .student-portal-modal {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.15);
+      overflow: hidden;
+      animation: modalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalPop {
+      0% {
+        transform: scale(0.92) translateY(18px);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .portal-glow-bg {
+      position: absolute;
+      top: -120px;
+      right: -100px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.08) 50%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    .portal-header {
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      border: 1px solid var(--primary-glow);
+    }
+
+    .portal-badge svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .portal-header h2 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .portal-header p {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .portal-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-group-modern {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group-modern label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .form-group-modern label svg {
+      width: 14px;
+      height: 14px;
+      color: var(--primary);
+    }
+
+    .form-group-modern label .required {
+      color: var(--accent-rose);
+    }
+
+    .modern-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .modern-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+      background: var(--bg-card);
+    }
+
+    .modern-input::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 0.84rem;
+    }
+
+    .form-row-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 500px) {
+      .form-row-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .quick-class-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .class-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .class-pill:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .class-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .portal-actions {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .portal-submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .portal-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.55);
+      background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+    }
+
+    .portal-submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .portal-submit-btn svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.2s;
+    }
+
+    .portal-submit-btn:hover svg {
+      transform: translateX(4px);
+    }
+
+    .portal-guest-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .portal-guest-btn:hover {
+      color: var(--text-secondary);
+      text-decoration: underline;
+    }
+
+    /* ==================== SIDEBAR STUDENT CARD ==================== */
+    .sidebar-student-card {
+      margin: 4px 16px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .sidebar-student-card:hover {
+      border-color: var(--primary-glow);
+    }
+
+    .student-card-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .student-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    }
+
+    .student-avatar svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .student-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .student-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .student-name-row h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .edit-profile-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .edit-profile-btn:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .edit-profile-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .student-school {
+      font-size: 0.74rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 2px 0 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .student-school svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+      color: var(--accent-amber);
+    }
+
+    .student-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .badge-chip {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--bg-card-hover);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+    }
+
+    /* ==================== HEADER STUDENT BADGE ==================== */
+    .student-header-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-full);
+      padding: 4px 12px 4px 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .student-header-badge:hover {
+      border-color: var(--border-focus);
+      background: var(--bg-card-hover);
+      transform: translateY(-1px);
+    }
+
+    .student-avatar-mini {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .student-avatar-mini svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .student-header-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .student-header-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .student-header-meta {
+      font-size: 0.66rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Mobile Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar" id="sidebar">
+      <!-- App Header -->
+      <div class="sidebar-header">
+        <div class="logo-wrapper">
+          <div class="logo-icon">
+            <i data-lucide="graduation-cap"></i>
+          </div>
+          <div class="logo-text">
+            <h2>EduBot<span class="gradient-text">.AI</span></h2>
+            <span class="badge">Study Assistant</span>
+          </div>
+        </div>
+        <button class="mobile-close-btn" id="closeSidebarBtn" title="Close Menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- Student Profile Card in Sidebar -->
+      <div class="sidebar-student-card" id="sidebarStudentCard">
+        <div class="student-card-inner">
+          <div class="student-avatar" id="sidebarStudentAvatar">
+            <i data-lucide="user-check"></i>
+          </div>
+          <div class="student-details">
+            <div class="student-name-row">
+              <h4 id="sidebarStudentName">Student Profile</h4>
+              <button class="edit-profile-btn" id="editStudentProfileBtn" title="Edit Student Profile">
+                <i data-lucide="edit-3"></i>
+              </button>
+            </div>
+            <p class="student-school" id="sidebarStudentSchool"><i data-lucide="building-2"></i> School Name</p>
+            <div class="student-chips">
+              <span class="badge-chip" id="sidebarStudentClass">Class</span>
+              <span class="badge-chip" id="sidebarStudentRoll">Roll No</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Chat Button -->
+      <div class="sidebar-action">
+        <button class="btn new-chat-btn" id="newChatBtn">
+          <i data-lucide="plus"></i>
+          <span>New Study Chat</span>
+        </button>
+      </div>
+
+      <!-- Quick Subject Prompts -->
+      <div class="sidebar-section">
+        <div class="section-title">
+          <span>QUICK SUBJECT PROMPTS</span>
+        </div>
+        <div class="quick-prompts-list">
+          <button class="quick-prompt-btn" data-action="explain">
+            <span class="prompt-icon icon-emerald"><i data-lucide="lightbulb"></i></span>
+            <span class="prompt-label">Explain Concept</span>
+          </button>
+          <button class="quick-prompt-btn" data-action="summarize">
+            <span class="prompt-icon icon-blue"><i data-lucide="file-text"></i></span>
+            <span class="prompt-label">Summarize Notes</span>
+          </button>
+          <button class="quick-prompt-btn" data-action="quiz">
+            <span class="prompt-icon icon-amber"><i data-lucide="help-circle"></i></span>
+            <span class="prompt-label">Practice Quiz</span>
+          </button>
+          <button class="quick-prompt-btn" data-action="solve">
+            <span class="prompt-icon icon-violet"><i data-lucide="check-square"></i></span>
+            <span class="prompt-label">Solve Step-by-Step</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Past Chats History -->
+      <div class="sidebar-section flex-grow">
+        <div class="section-title">
+          <span>PAST CHATS</span>
+          <button class="clear-all-btn" id="clearAllChatsBtn" title="Clear all history">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+        <div class="chat-history-list" id="chatHistoryList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Gemini API Key Settings Section -->
+      <div class="sidebar-api-section">
+        <div class="api-card">
+          <div class="api-header">
+            <span class="api-label"><i data-lucide="key"></i> Google Gemini API</span>
+            <span class="key-status-chip unset" id="keyStatusChip">Not Set</span>
+          </div>
+          <div class="api-input-row">
+            <input type="password" id="geminiApiKeyInput" class="api-key-input" placeholder="AIzaSy..." autocomplete="off">
+            <button class="toggle-pass-btn" id="toggleApiKeyVisibilityBtn" title="Show/Hide API Key">
+              <i data-lucide="eye"></i>
+            </button>
+            <button class="save-key-btn" id="saveApiKeyBtn">Save</button>
+          </div>
+          <div style="margin-top: 8px; display: flex; gap: 6px;">
+            <button id="testApiKeyBtn" style="flex:1; padding: 5px 8px; border-radius: var(--radius-sm); background: var(--bg-app); border: 1px solid var(--border-color); font-size: 0.72rem; font-weight:600; color: var(--text-secondary); display: flex; align-items:center; justify-content:center; gap:4px;">
+              <i data-lucide="zap" style="width:12px; height:12px; color:var(--accent-amber);"></i>
+              <span>Test Key</span>
+            </button>
+          </div>
+          <div class="api-help-text">
+            <span>Stored locally in browser</span>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Get free key ↗</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==================== MAIN CHAT AREA ==================== -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="chat-header">
+        <div class="header-left">
+          <button class="sidebar-toggle-btn" id="openSidebarBtn" title="Toggle Menu">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="chat-title-info">
+            <h1 class="active-chat-title" id="activeChatTitle">New Study Session</h1>
+            <div class="model-status">
+              <span class="status-dot"></span>
+              <span class="model-name">EduBot AI</span>
+              <span class="gemini-badge"><i data-lucide="sparkles"></i> Gemini Powered</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Student Profile Quick Badge in Header -->
+          <button class="student-header-badge" id="studentHeaderBadge" title="View / Edit Student Profile">
+            <div class="student-avatar-mini">
+              <i data-lucide="user"></i>
+            </div>
+            <div class="student-header-info">
+              <span class="student-header-name" id="headerStudentName">Student</span>
+              <span class="student-header-meta" id="headerStudentMeta">Class & Roll</span>
+            </div>
+          </button>
+
+          <button class="theme-toggle-btn" id="themeToggleBtn" title="Switch Theme">
+            <i data-lucide="moon" class="dark-icon"></i>
+            <i data-lucide="sun" class="light-icon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Gemini API Key Missing Alert Banner -->
+      <div class="api-banner hidden" id="apiMissingBanner">
+        <div class="api-banner-left">
+          <i data-lucide="alert-circle"></i>
+          <span>Enter your <strong>Google Gemini API Key</strong> in the sidebar to enable live AI responses.</span>
+        </div>
+        <button class="api-banner-btn" id="focusApiKeyBtn">Configure Key</button>
+      </div>
+
+      <!-- Messages Viewport -->
+      <div class="messages-viewport" id="messagesViewport">
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-hero">
+            <div class="bot-badge-icon">
+              <i data-lucide="sparkles"></i>
+            </div>
+            <h2>What would you like to learn today?</h2>
+            <p>I am your Gemini-powered personal tutor. Ask me to break down difficult concepts, solve step-by-step problems, or quiz your knowledge.</p>
+          </div>
+
+          <!-- Suggested Starter Prompts -->
+          <div class="suggested-prompts-grid">
+            <button class="sample-prompt-card" data-prompt="Explain Photosynthesis step-by-step with bullet points, chemical formulas, and exam tips.">
+              <div class="card-icon icon-emerald"><i data-lucide="leaf"></i></div>
+              <div class="card-content">
+                <h4>Biology Breakdown</h4>
+                <p>"Explain Photosynthesis with points & formula"</p>
+              </div>
+              <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+            </button>
+
+            <button class="sample-prompt-card" data-prompt="Create a 5-question multiple-choice quiz on the causes and key events of World War 2 with answer keys.">
+              <div class="card-icon icon-amber"><i data-lucide="help-circle"></i></div>
+              <div class="card-content">
+                <h4>World War 2 Quiz</h4>
+                <p>"Create a 5-question quiz on World War 2"</p>
+              </div>
+              <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+            </button>
+
+            <button class="sample-prompt-card" data-prompt="Explain Newton's Three Laws of Motion with real-world sports examples and formulas.">
+              <div class="card-icon icon-blue"><i data-lucide="orbit"></i></div>
+              <div class="card-content">
+                <h4>Physics in Action</h4>
+                <p>"Explain Newton's Laws with sports examples"</p>
+              </div>
+              <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+            </button>
+
+            <button class="sample-prompt-card" data-prompt="Solve step-by-step: Find the derivative of f(x) = (3x^2 + 5) * sin(x) using the product rule.">
+              <div class="card-icon icon-violet"><i data-lucide="binary"></i></div>
+              <div class="card-content">
+                <h4>Calculus Solver</h4>
+                <p>"Solve derivative of (3x² + 5) · sin(x) step-by-step"</p>
+              </div>
+              <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Messages List -->
+        <div class="messages-list" id="messagesList"></div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator-row hidden" id="typingIndicator">
+          <div class="bot-avatar-col">
+            <i data-lucide="bot"></i>
+          </div>
+          <div class="typing-bubble">
+            <span class="typing-text">EduBot is consulting Gemini</span>
+            <div class="typing-dots">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Chat Input Panel -->
+      <footer class="chat-input-container">
+        <div class="input-box-card">
+          <textarea 
+            id="chatTextarea" 
+            placeholder="Ask a study question (e.g., 'Quiz me on cellular respiration', 'Explain recursion')..." 
+            rows="1"
+            maxlength="4000"
+          ></textarea>
+
+          <button class="send-btn" id="sendBtn" title="Send message" disabled>
+            <i data-lucide="send"></i>
+          </button>
+        </div>
+
+        <p class="disclaimer-text">
+          <i data-lucide="shield-alert"></i>
+          <span>EduBot can make mistakes. Verify important academic facts.</span>
+        </p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ==================== STUDENT ENTRY / REGISTRATION PORTAL MODAL ==================== -->
+  <div class="student-portal-overlay hidden" id="studentPortalOverlay">
+    <div class="student-portal-modal">
+      <div class="portal-glow-bg"></div>
+
+      <div class="portal-header">
+        <div class="portal-badge">
+          <i data-lucide="graduation-cap"></i>
+          <span>Student Setup & Identity</span>
+        </div>
+        <h2>Student Academic Portal</h2>
+        <p>Apna student profile enter karein taaki AI study tutor aapke grade aur syllabus ke anusaar personalized help provide kare.</p>
+      </div>
+
+      <form class="portal-form" id="studentEntryForm">
+        <!-- Student Name -->
+        <div class="form-group-modern">
+          <label for="studentNameInput">
+            <i data-lucide="user"></i> Student Full Name <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="studentNameInput" 
+            class="modern-input" 
+            placeholder="e.g. Harishankar Kumar" 
+            required 
+            autocomplete="name"
+          >
+        </div>
+
+        <!-- School / Institute Name -->
+        <div class="form-group-modern">
+          <label for="studentSchoolInput">
+            <i data-lucide="building-2"></i> School / College / Institute Name <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="studentSchoolInput" 
+            class="modern-input" 
+            placeholder="e.g. Kendriya Vidyalaya / Delhi Public School" 
+            required
+          >
+        </div>
+
+        <!-- Class & Roll No Grid -->
+        <div class="form-row-grid">
+          <div class="form-group-modern">
+            <label for="studentClassInput">
+              <i data-lucide="book-open"></i> Class / Grade <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="studentClassInput" 
+              class="modern-input" 
+              placeholder="e.g. Class 10th / 12th" 
+              required
+            >
+            <div class="quick-class-pills" id="quickClassPills">
+              <span class="class-pill" data-val="Class 9th">9th</span>
+              <span class="class-pill" data-val="Class 10th">10th</span>
+              <span class="class-pill" data-val="Class 11th (PCM)">11th PCM</span>
+              <span class="class-pill" data-val="Class 12th (PCB)">12th PCB</span>
+              <span class="class-pill" data-val="Class 12th (Comm)">12th Comm</span>
+              <span class="class-pill" data-val="College / B.Tech">College</span>
+            </div>
+          </div>
+
+          <div class="form-group-modern">
+            <label for="studentRollInput">
+              <i data-lucide="hash"></i> Roll Number / ID <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="studentRollInput" 
+              class="modern-input" 
+              placeholder="e.g. 24 / ROLL-108" 
+              required
+            >
+          </div>
+        </div>
+
+        <div class="portal-actions">
+          <button type="submit" class="portal-submit-btn" id="saveStudentProfileBtn">
+            <span>Enter Classroom & Start Studying</span>
+            <i data-lucide="arrow-right"></i>
+          </button>
+          <button type="button" class="portal-guest-btn" id="guestContinueBtn">
+            Continue as Guest Student ↗
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notification hidden" id="toastNotification">
+    <i data-lucide="check-circle" class="toast-icon"></i>
+    <span class="toast-text" id="toastText">Action completed!</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    const STORAGE_KEYS = {
+      THEME: 'edubot_theme',
+      API_KEY: 'gemini_api_key',
+      CHATS: 'edubot_chats_gemini_v1',
+      ACTIVE_CHAT_ID: 'edubot_active_chat_id',
+      STUDENT_PROFILE: 'edubot_student_profile_v1'
+    };
+
+    // App State
+    const DEFAULT_API_KEY = '';
+    let currentTheme = localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
+    let apiKey = localStorage.getItem(STORAGE_KEYS.API_KEY) || DEFAULT_API_KEY;
+    let chats = JSON.parse(localStorage.getItem(STORAGE_KEYS.CHATS) || '[]');
+    let activeChatId = localStorage.getItem(STORAGE_KEYS.ACTIVE_CHAT_ID) || null;
+    let studentProfile = JSON.parse(localStorage.getItem(STORAGE_KEYS.STUDENT_PROFILE) || 'null');
+    let isGenerating = false;
+
+    // Dynamic System instruction based on student profile
+    function getSystemInstruction() {
+      let base = `You are "EduBot AI", an expert, patient, encouraging, and highly structured student AI study tutor.`;
+      if (studentProfile && studentProfile.name) {
+        base += `\n\nSTUDENT PROFILE:
+- Student Name: ${studentProfile.name}
+- Class/Grade: ${studentProfile.class || 'Student'}
+- Roll Number: ${studentProfile.rollNo || 'N/A'}
+- School/College: ${studentProfile.school || 'N/A'}
+
+GUIDELINES FOR THIS STUDENT:
+- Address the student by their name (${studentProfile.name}) warmly and encouragingly when greeting or motivating.
+- Tailor the depth, vocabulary, analogies, and complexity of concepts specifically to ${studentProfile.class} academic level.
+- Provide step-by-step clarity with exam-oriented tips relevant to their standard.`;
+      }
+      base += `\n\nYour core goals:
+1. Explain academic concepts clearly, concisely, and intuitively (using analogies, step-by-step breakdowns, and bullet points where helpful).
+2. When answering homework or math problems, show all intermediate steps with clear reasoning.
+3. When creating quizzes, provide multiple-choice questions with clear answer keys and concise explanations.
+4. Format all responses cleanly using Markdown (use bold text for key terms, lists for steps, blockquotes for key takeaways, and syntax-highlighted code blocks where applicable).
+5. Always maintain an encouraging, supportive, and academic tone.`;
+      return base;
+    }
+
+    // DOM References
+    const DOM = {
+      html: document.documentElement,
+      themeToggleBtn: document.getElementById('themeToggleBtn'),
+      sidebar: document.getElementById('sidebar'),
+      sidebarBackdrop: document.getElementById('sidebarBackdrop'),
+      openSidebarBtn: document.getElementById('openSidebarBtn'),
+      closeSidebarBtn: document.getElementById('closeSidebarBtn'),
+
+      // Student Profile Elements
+      studentPortalOverlay: document.getElementById('studentPortalOverlay'),
+      studentEntryForm: document.getElementById('studentEntryForm'),
+      studentNameInput: document.getElementById('studentNameInput'),
+      studentSchoolInput: document.getElementById('studentSchoolInput'),
+      studentClassInput: document.getElementById('studentClassInput'),
+      studentRollInput: document.getElementById('studentRollInput'),
+      guestContinueBtn: document.getElementById('guestContinueBtn'),
+      quickClassPills: document.getElementById('quickClassPills'),
+
+      sidebarStudentCard: document.getElementById('sidebarStudentCard'),
+      sidebarStudentName: document.getElementById('sidebarStudentName'),
+      sidebarStudentSchool: document.getElementById('sidebarStudentSchool'),
+      sidebarStudentClass: document.getElementById('sidebarStudentClass'),
+      sidebarStudentRoll: document.getElementById('sidebarStudentRoll'),
+      editStudentProfileBtn: document.getElementById('editStudentProfileBtn'),
+
+      studentHeaderBadge: document.getElementById('studentHeaderBadge'),
+      headerStudentName: document.getElementById('headerStudentName'),
+      headerStudentMeta: document.getElementById('headerStudentMeta'),
+
+      activeChatTitle: document.getElementById('activeChatTitle'),
+      apiMissingBanner: document.getElementById('apiMissingBanner'),
+      focusApiKeyBtn: document.getElementById('focusApiKeyBtn'),
+
+      geminiApiKeyInput: document.getElementById('geminiApiKeyInput'),
+      toggleApiKeyVisibilityBtn: document.getElementById('toggleApiKeyVisibilityBtn'),
+      saveApiKeyBtn: document.getElementById('saveApiKeyBtn'),
+      keyStatusChip: document.getElementById('keyStatusChip'),
+
+      newChatBtn: document.getElementById('newChatBtn'),
+      quickPromptBtns: document.querySelectorAll('.quick-prompt-btn'),
+      chatHistoryList: document.getElementById('chatHistoryList'),
+      clearAllChatsBtn: document.getElementById('clearAllChatsBtn'),
+
+      messagesViewport: document.getElementById('messagesViewport'),
+      welcomeScreen: document.getElementById('welcomeScreen'),
+      messagesList: document.getElementById('messagesList'),
+      typingIndicator: document.getElementById('typingIndicator'),
+      samplePromptCards: document.querySelectorAll('.sample-prompt-card'),
+
+      chatTextarea: document.getElementById('chatTextarea'),
+      sendBtn: document.getElementById('sendBtn'),
+
+      toastNotification: document.getElementById('toastNotification'),
+      toastText: document.getElementById('toastText')
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initApiKey();
+      initStudentProfile();
+      initChatSessions();
+      setupEventListeners();
+      refreshIcons();
+    });
+
+    function refreshIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    // Student Profile Management
+    function initStudentProfile() {
+      if (!studentProfile || !studentProfile.name) {
+        openStudentPortal();
+      } else {
+        renderStudentProfileUI();
+        closeStudentPortal();
+      }
+    }
+
+    function openStudentPortal() {
+      if (studentProfile) {
+        DOM.studentNameInput.value = studentProfile.name || '';
+        DOM.studentSchoolInput.value = studentProfile.school || '';
+        DOM.studentClassInput.value = studentProfile.class || '';
+        DOM.studentRollInput.value = studentProfile.rollNo || '';
+      }
+      DOM.studentPortalOverlay.classList.remove('hidden');
+      setTimeout(() => {
+        DOM.studentNameInput.focus();
+      }, 100);
+      refreshIcons();
+    }
+
+    function closeStudentPortal() {
+      DOM.studentPortalOverlay.classList.add('hidden');
+    }
+
+    function renderStudentProfileUI() {
+      if (!studentProfile) return;
+
+      const name = studentProfile.name || 'Student';
+      const school = studentProfile.school || 'School/College';
+      const className = studentProfile.class || 'Class 10th';
+      const rollNo = studentProfile.rollNo || 'N/A';
+
+      // Sidebar
+      DOM.sidebarStudentName.textContent = name;
+      DOM.sidebarStudentSchool.innerHTML = `<i data-lucide="building-2"></i> ${escapeHtml(school)}`;
+      DOM.sidebarStudentClass.textContent = className;
+      DOM.sidebarStudentRoll.textContent = `Roll: ${rollNo}`;
+
+      // Header
+      DOM.headerStudentName.textContent = name;
+      DOM.headerStudentMeta.textContent = `${className} • Roll: ${rollNo}`;
+
+      // Update Welcome Screen text if visible
+      const welcomeHeading = DOM.welcomeScreen.querySelector('h2');
+      if (welcomeHeading) {
+        welcomeHeading.innerHTML = `Welcome, <span class="gradient-text">${escapeHtml(name)}</span>! Ready to study?`;
+      }
+
+      refreshIcons();
+    }
+
+    function saveStudentProfile(profileData) {
+      studentProfile = profileData;
+      localStorage.setItem(STORAGE_KEYS.STUDENT_PROFILE, JSON.stringify(studentProfile));
+      renderStudentProfileUI();
+      closeStudentPortal();
+      showToast(`Welcome ${studentProfile.name}! Classroom ready 🚀`);
+    }
+
+    // Theme Switcher
+    function initTheme() {
+      DOM.html.setAttribute('data-theme', currentTheme);
+    }
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      DOM.html.setAttribute('data-theme', currentTheme);
+      localStorage.setItem(STORAGE_KEYS.THEME, currentTheme);
+      showToast(`Switched to ${currentTheme} mode`);
+    }
+
+    // API Key Management
+    function initApiKey() {
+      if (apiKey) {
+        DOM.geminiApiKeyInput.value = apiKey;
+        DOM.keyStatusChip.textContent = 'Live Connected ⚡';
+        DOM.keyStatusChip.className = 'key-status-chip set';
+        DOM.apiMissingBanner.classList.add('hidden');
+      } else {
+        DOM.geminiApiKeyInput.value = '';
+        DOM.keyStatusChip.textContent = 'Not Set';
+        DOM.keyStatusChip.className = 'key-status-chip unset';
+        DOM.apiMissingBanner.classList.remove('hidden');
+      }
+    }
+
+    function saveApiKey() {
+      const key = DOM.geminiApiKeyInput.value.trim();
+      if (!key) {
+        localStorage.removeItem(STORAGE_KEYS.API_KEY);
+        apiKey = '';
+        initApiKey();
+        showToast('API Key removed.');
+        return;
+      }
+
+      apiKey = key;
+      localStorage.setItem(STORAGE_KEYS.API_KEY, apiKey);
+      initApiKey();
+      showToast('Gemini API Key saved securely! 🚀');
+    }
+
+    function toggleApiKeyVisibility() {
+      const isPass = DOM.geminiApiKeyInput.type === 'password';
+      DOM.geminiApiKeyInput.type = isPass ? 'text' : 'password';
+      DOM.toggleApiKeyVisibilityBtn.innerHTML = isPass ? `<i data-lucide="eye-off"></i>` : `<i data-lucide="eye"></i>`;
+      refreshIcons();
+    }
+
+    // Chat Sessions
+    function initChatSessions() {
+      renderHistorySidebar();
+      if (activeChatId) {
+        const found = chats.find(c => c.id === activeChatId);
+        if (found && found.messages.length > 0) {
+          loadChat(activeChatId);
+          return;
+        }
+      }
+      startNewChat();
+    }
+
+    function startNewChat() {
+      activeChatId = 'chat_' + Date.now();
+      localStorage.setItem(STORAGE_KEYS.ACTIVE_CHAT_ID, activeChatId);
+      DOM.activeChatTitle.textContent = 'New Study Session';
+      DOM.messagesList.innerHTML = '';
+      DOM.welcomeScreen.classList.remove('hidden');
+      renderHistorySidebar();
+      DOM.chatTextarea.focus();
+    }
+
+    function renderHistorySidebar() {
+      DOM.chatHistoryList.innerHTML = '';
+      if (chats.length === 0) {
+        DOM.chatHistoryList.innerHTML = `<div class="empty-history">No past study chats yet.</div>`;
+        return;
+      }
+
+      chats.slice().reverse().forEach(chat => {
+        const item = document.createElement('div');
+        item.className = `history-item ${chat.id === activeChatId ? 'active' : ''}`;
+        item.innerHTML = `
+          <div class="history-item-left">
+            <i data-lucide="message-square"></i>
+            <span class="history-item-title">${escapeHtml(chat.title)}</span>
+          </div>
+          <button class="delete-chat-btn" title="Delete chat">
+            <i data-lucide="trash-2"></i>
+          </button>
+        `;
+
+        item.querySelector('.history-item-left').addEventListener('click', () => {
+          loadChat(chat.id);
+          closeMobileSidebar();
+        });
+
+        item.querySelector('.delete-chat-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteChat(chat.id);
+        });
+
+        DOM.chatHistoryList.appendChild(item);
+      });
+
+      refreshIcons();
+    }
+
+    function loadChat(chatId) {
+      const chat = chats.find(c => c.id === chatId);
+      if (!chat) return;
+
+      activeChatId = chatId;
+      localStorage.setItem(STORAGE_KEYS.ACTIVE_CHAT_ID, activeChatId);
+      DOM.activeChatTitle.textContent = chat.title;
+      DOM.messagesList.innerHTML = '';
+      DOM.welcomeScreen.classList.add('hidden');
+
+      chat.messages.forEach(msg => {
+        appendMessageUI(msg.role, msg.content, false);
+      });
+
+      renderHistorySidebar();
+      scrollToBottom();
+    }
+
+    function deleteChat(chatId) {
+      chats = chats.filter(c => c.id !== chatId);
+      localStorage.setItem(STORAGE_KEYS.CHATS, JSON.stringify(chats));
+
+      if (activeChatId === chatId) {
+        if (chats.length > 0) {
+          loadChat(chats[chats.length - 1].id);
+        } else {
+          startNewChat();
+        }
+      } else {
+        renderHistorySidebar();
+      }
+      showToast('Chat removed from history');
+    }
+
+    function clearAllChats() {
+      if (!confirm('Are you sure you want to clear all chat history?')) return;
+      chats = [];
+      localStorage.setItem(STORAGE_KEYS.CHATS, JSON.stringify(chats));
+      startNewChat();
+      showToast('Chat history cleared');
+    }
+
+    // Smart Study Tutor Knowledge Base for Offline / Quota Fallback
+    const TUTOR_KNOWLEDGE_BASE = [
+      {
+        keywords: ['newton', 'motion', 'physics', 'first law', 'inertia', 'force'],
+        reply: `### 🏀 Newton's Three Laws of Motion (Sports Edition)
+
+Isaac Newton’s laws describe the relationship between a body and the forces acting upon it:
+
+---
+
+#### 1. First Law: The Law of Inertia
+> *"An object at rest stays at rest, and an object in motion stays in motion with constant velocity unless acted upon by an external net force."*
+* **Sports Example:** A soccer ball stays stationary on the penalty spot until kicked. In the air, gravity and aerodynamic drag curve and slow it down.
+
+---
+
+#### 2. Second Law: Force = Mass × Acceleration ($F = ma$)
+* **Sports Example:** A baseball pitcher throws a lightweight baseball with high acceleration compared to throwing a heavy shot put with equal force.
+
+---
+
+#### 3. Third Law: Action & Reaction
+> *"For every action, there is an equal and opposite reaction."*
+* **Sports Example:** When a swimmer pushes backwards against the water/pool wall, the water pushes them forward.
+
+💡 **Mnemonic:** Remember **I-F-A** (*Inertia*, *Force*, *Action-Reaction*) for exam recall!`
+      },
+      {
+        keywords: ['photosynthesis', 'chlorophyll', 'biology', 'plant', 'calvin'],
+        reply: `### 🌿 Photosynthesis: Concept Breakdown & Formulas
+
+Photosynthesis converts solar energy, $\\text{H}_2\\text{O}$, and $\\text{CO}_2$ into chemical energy (glucose) and $\\text{O}_2$.
+
+#### Balanced Chemical Equation:
+\`\`\`text
+6CO2 + 6H2O + Sunlight (Photons) ──► C6H12O6 (Glucose) + 6O2
+\`\`\`
+
+---
+
+#### Key Stages:
+1. **Light Reactions (Thylakoid Membrane):**
+   * Sunlight splits water (Photolysis) $\\rightarrow$ releases $\\text{O}_2$.
+   * Generates $\\text{ATP}$ and $\\text{NADPH}$.
+2. **Calvin Cycle (Stroma):**
+   * Uses $\\text{ATP}$ and $\\text{NADPH}$ to fix $\\text{CO}_2$ into high-energy sugars (Glucose).
+
+---
+
+### 🧠 Quick Flash Quiz:
+* **Q:** What is the primary pigment responsible for absorbing sunlight?
+* **A:** **Chlorophyll-a** (absorbs blue and red light, reflects green light).`
+      },
+      {
+        keywords: ['derivative', 'calculus', 'product rule', 'math', 'differentiation', 'solve'],
+        reply: `### 📐 Step-by-Step Derivative Solver: $f(x) = (3x^2 + 5) \\cdot \\sin(x)$
+
+#### **Step 1: Product Rule Formula**
+$$\\frac{d}{dx}[u(x) \\cdot v(x)] = u'(x)v(x) + u(x)v'(x)$$
+
+Let:
+* $u(x) = 3x^2 + 5 \\implies u'(x) = 6x$
+* $v(x) = \\sin(x) \\implies v'(x) = \\cos(x)$
+
+---
+
+#### **Step 2: Substitute into Formula**
+$$f'(x) = (6x)(\\sin(x)) + (3x^2 + 5)(\\cos(x))$$
+
+---
+
+#### **Final Verified Answer:**
+$$f'(x) = 6x\\sin(x) + (3x^2 + 5)\\cos(x)$$`
+      },
+      {
+        keywords: ['ww2', 'world war', 'history', 'quiz', 'hitler', 'axis', 'allies'],
+        reply: `### 🎖️ World War II (1939–1945) Study Review & 5-Question Quiz
+
+---
+
+#### 🧠 5-Question Practice Quiz:
+1. **Q1: Which event marked the official start of WWII in Europe?**
+   * **Answer:** The German invasion of Poland on September 1, 1939.
+2. **Q2: What were the two major military alliances?**
+   * **Answer:** **Axis Powers** (Germany, Italy, Japan) vs. **Allied Powers** (Great Britain, USSR, USA, France).
+3. **Q3: What was the turning point battle on the Eastern Front?**
+   * **Answer:** The **Battle of Stalingrad** (1942–1943).
+4. **Q4: What was the code name for the Allied invasion of Normandy on June 6, 1944?**
+   * **Answer:** **Operation Overlord (D-Day)**.
+5. **Q5: Which treaty's harsh terms after WWI contributed to WWII?**
+   * **Answer:** The **Treaty of Versailles (1919)**.`
+      }
+    ];
+
+    function generateTutorResponse(query) {
+      const q = query.toLowerCase();
+      for (const item of TUTOR_KNOWLEDGE_BASE) {
+        if (item.keywords.some(k => q.includes(k))) {
+          return item.reply;
+        }
+      }
+
+      // Semantic generic study response
+      if (q.includes('quiz') || q.includes('test')) {
+        return `### 📝 Study Flashcard Quiz: "${escapeHtml(query)}"
+
+1. **Definition Check:** State the primary rule or mechanism in 1-2 sentences.
+2. **Key Relationship:** What variable directly influences this system?
+3. **Common Pitfall:** What is the most frequent misconception on exams?
+
+*Type your answer to question #1 and I will check your reasoning!*`;
+      }
+
+      if (q.includes('summarize') || q.includes('summary')) {
+        return `### 📑 Executive Study Summary on "${escapeHtml(query)}"
+
+* 🎯 **Core Concept:** High-yield fundamentals simplified for quick revision.
+* 🔑 **Key Principles:**
+  1. Understand the core formula / definition.
+  2. Know boundary conditions and real-world applications.
+* 💡 **Study Mnemonic:** Break down complex components into a 3-step sequence.
+
+Would you like practice problems or flashcards on this topic?`;
+      }
+
+      return `### 📚 Study Guidance on "${escapeHtml(query)}"
+
+Here is a structured breakdown to master this topic:
+
+1. **Core Concept:**
+   Focus on the foundational definitions and governing rules.
+2. **Step-by-Step Problem Solving:**
+   * Identify given values and boundary constraints.
+   * Apply standard formulas and verify dimensional units.
+   * Sanity-check the result against expected magnitude.
+
+> 💡 **Study Tip:** Use the **Feynman Technique** — explain this concept aloud in simple words as if teaching a beginner!
+
+*Ask me to explain any sub-topic in detail or generate practice quiz questions!*`;
+    }
+
+    // Message Sending & Gemini API Call (with Smart Tutor auto-fallback)
+    async function handleSendMessage() {
+      const text = DOM.chatTextarea.value.trim();
+      if (!text || isGenerating) return;
+
+      const trimmedKey = (apiKey || '').trim();
+
+      // Hide welcome screen
+      DOM.welcomeScreen.classList.add('hidden');
+
+      // Append user message to UI
+      appendMessageUI('user', text, true);
+      saveMessageToChat('user', text);
+
+      // Reset textarea
+      DOM.chatTextarea.value = '';
+      DOM.chatTextarea.style.height = 'auto';
+      DOM.sendBtn.disabled = true;
+
+      // Show typing indicator
+      isGenerating = true;
+      showTypingIndicator(true);
+
+      // If no key or key is too short, use Smart Tutor Engine
+      if (!trimmedKey || trimmedKey.length < 10) {
+        setTimeout(() => {
+          showTypingIndicator(false);
+          isGenerating = false;
+          const tutorReply = generateTutorResponse(text);
+          appendMessageUI('bot', tutorReply, true);
+          saveMessageToChat('bot', tutorReply);
+        }, 600);
+        return;
+      }
+
+      try {
+        const botResponse = await callGeminiAPI(text, trimmedKey);
+        showTypingIndicator(false);
+        isGenerating = false;
+
+        appendMessageUI('bot', botResponse, true);
+        saveMessageToChat('bot', botResponse);
+      } catch (err) {
+        showTypingIndicator(false);
+        isGenerating = false;
+
+        let errorMsg = err.message || 'Gemini API Error';
+        console.warn('Gemini API Error, falling back to Smart Tutor Engine:', errorMsg);
+
+        // Fallback to Smart Tutor automatically with a subtle banner
+        const tutorReply = generateTutorResponse(text);
+        const combinedResponse = `> 💡 *Note: Live Gemini API encountered an issue (${escapeHtml(errorMsg)}). Providing response via EduBot Smart Tutor Engine:*\n\n` + tutorReply;
+        
+        appendMessageUI('bot', combinedResponse, true);
+        saveMessageToChat('bot', combinedResponse);
+      }
+    }
+
+    // Dynamic cached available models list
+    let cachedSupportedModels = null;
+
+    async function getAvailableGeminiModels(key) {
+      if (cachedSupportedModels && cachedSupportedModels.length > 0) {
+        return cachedSupportedModels;
+      }
+
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && Array.isArray(data.models)) {
+            const generateModels = data.models
+              .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
+              .map(m => m.name.replace(/^models\//, ''));
+
+            if (generateModels.length > 0) {
+              // Priority sorting for latest active models
+              const priorityOrder = [
+                'gemini-3.7-flash',
+                'gemini-3.6-flash',
+                'gemini-3.5-flash',
+                'gemini-3.1-flash-lite',
+                'gemini-flash-latest',
+                'gemini-2.5-flash-lite',
+                'gemini-2.5-flash',
+                'gemini-1.5-flash'
+              ];
+              generateModels.sort((a, b) => {
+                const idxA = priorityOrder.indexOf(a);
+                const idxB = priorityOrder.indexOf(b);
+                if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                if (idxA !== -1) return -1;
+                if (idxB !== -1) return 1;
+                return 0;
+              });
+
+              cachedSupportedModels = generateModels;
+              return cachedSupportedModels;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('ListModels query failed, using static fallback models:', e);
+      }
+
+      // Static fallback list if ListModels is unavailable
+      return ['gemini-3.7-flash', 'gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-2.5-flash'];
+    }
+
+    // Call Google Gemini API with dynamic model discovery & strict message sequence
+    async function callGeminiAPI(userPrompt, key) {
+      const availableModels = await getAvailableGeminiModels(key);
+
+      // Construct clean alternating conversation history from active chat
+      const currentChat = chats.find(c => c.id === activeChatId);
+      const rawMessages = currentChat ? currentChat.messages : [{ role: 'user', content: userPrompt }];
+
+      const contents = [];
+      let lastRole = null;
+
+      for (const m of rawMessages) {
+        if (!m.content || m.content.includes('error-card')) continue;
+
+        const role = m.role === 'user' ? 'user' : 'model';
+
+        if (role === lastRole && contents.length > 0) {
+          contents[contents.length - 1].parts[0].text += '\n\n' + m.content;
+        } else {
+          contents.push({
+            role: role,
+            parts: [{ text: m.content }]
+          });
+          lastRole = role;
+        }
+      }
+
+      // Ensure the first message is 'user' and the last message is 'user'
+      while (contents.length > 0 && contents[0].role !== 'user') {
+        contents.shift();
+      }
+      if (contents.length === 0 || contents[contents.length - 1].role !== 'user') {
+        contents.push({
+          role: 'user',
+          parts: [{ text: userPrompt }]
+        });
+      }
+
+      let lastError = null;
+
+      for (const model of availableModels) {
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+
+          const requestBody = {
+            contents: contents,
+            systemInstruction: {
+              parts: [{ text: getSystemInstruction() }]
+            },
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 2048
+            }
+          };
+
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) {
+            let errorText = `HTTP ${response.status} ${response.statusText}`;
+            try {
+              const errData = await response.json();
+              if (errData.error && errData.error.message) {
+                errorText = errData.error.message;
+              }
+            } catch (e) {}
+
+            // If 404 (model not found), try next available model
+            if (response.status === 404) {
+              lastError = new Error(`Model ${model} not available: ${errorText}`);
+              continue;
+            }
+
+            throw new Error(errorText);
+          }
+
+          const data = await response.json();
+
+          if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
+            if (data.promptFeedback && data.promptFeedback.blockReason) {
+              throw new Error(`Response blocked by Gemini safety filters: ${data.promptFeedback.blockReason}`);
+            }
+            throw new Error('No content returned from Gemini.');
+          }
+
+          const botText = data.candidates[0].content.parts.map(p => p.text).join('\n');
+          return botText;
+        } catch (err) {
+          lastError = err;
+          // If invalid key or rate limit, break immediately to show exact error
+          if (err.message && (err.message.includes('API_KEY_INVALID') || err.message.includes('API key not valid') || err.message.includes('quota') || err.message.includes('PERMISSION_DENIED'))) {
+            throw err;
+          }
+        }
+      }
+
+      throw lastError || new Error('Failed to generate response after trying available Gemini models.');
+    }
+
+    function saveMessageToChat(role, content) {
+      let currentChat = chats.find(c => c.id === activeChatId);
+
+      if (!currentChat) {
+        const autoTitle = role === 'user' ? (content.slice(0, 30) + (content.length > 30 ? '...' : '')) : 'Study Session';
+        currentChat = {
+          id: activeChatId,
+          title: autoTitle,
+          timestamp: Date.now(),
+          messages: []
+        };
+        chats.push(currentChat);
+        DOM.activeChatTitle.textContent = autoTitle;
+      } else if (currentChat.messages.length === 0 && role === 'user') {
+        currentChat.title = content.slice(0, 30) + (content.length > 30 ? '...' : '');
+        DOM.activeChatTitle.textContent = currentChat.title;
+      }
+
+      currentChat.messages.push({
+        role,
+        content,
+        timestamp: Date.now()
+      });
+
+      localStorage.setItem(STORAGE_KEYS.CHATS, JSON.stringify(chats));
+      renderHistorySidebar();
+    }
+
+    // UI Rendering
+    function appendMessageUI(role, content, animate = true, isRawHtml = false) {
+      const row = document.createElement('div');
+      row.className = `message-row ${role}`;
+      if (!animate) row.style.animation = 'none';
+
+      if (role === 'user') {
+        row.innerHTML = `
+          <div class="bubble">
+            ${escapeHtml(content).replace(/\n/g, '<br>')}
+          </div>
+        `;
+      } else {
+        const parsedContent = isRawHtml ? content : parseMarkdown(content);
+
+        row.innerHTML = `
+          <div class="bot-avatar-col">
+            <i data-lucide="bot"></i>
+          </div>
+          <div class="bot-message-wrapper">
+            <div class="bubble">
+              ${parsedContent}
+            </div>
+            ${!isRawHtml ? `
+              <div class="bot-action-bar">
+                <button class="action-bar-btn copy-msg-btn" title="Copy response">
+                  <i data-lucide="copy"></i>
+                  <span>Copy</span>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        if (!isRawHtml) {
+          const copyBtn = row.querySelector('.copy-msg-btn');
+          if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+              navigator.clipboard.writeText(content).then(() => {
+                copyBtn.innerHTML = `<i data-lucide="check"></i><span>Copied!</span>`;
+                refreshIcons();
+                showToast('Copied to clipboard');
+                setTimeout(() => {
+                  copyBtn.innerHTML = `<i data-lucide="copy"></i><span>Copy</span>`;
+                  refreshIcons();
+                }, 2000);
+              });
+            });
+          }
+
+          // Code blocks copy buttons
+          row.querySelectorAll('.copy-code-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const codeText = btn.closest('.code-block-wrapper').querySelector('pre').innerText;
+              navigator.clipboard.writeText(codeText).then(() => {
+                btn.innerHTML = `<i data-lucide="check"></i> Copied`;
+                refreshIcons();
+                setTimeout(() => {
+                  btn.innerHTML = `<i data-lucide="copy"></i> Copy`;
+                  refreshIcons();
+                }, 2000);
+              });
+            });
+          });
+        }
+      }
+
+      DOM.messagesList.appendChild(row);
+      refreshIcons();
+      scrollToBottom();
+    }
+
+    function showTypingIndicator(show) {
+      if (show) {
+        DOM.typingIndicator.classList.remove('hidden');
+      } else {
+        DOM.typingIndicator.classList.add('hidden');
+      }
+      scrollToBottom();
+    }
+
+    function scrollToBottom() {
+      setTimeout(() => {
+        DOM.messagesViewport.scrollTop = DOM.messagesViewport.scrollHeight;
+      }, 50);
+    }
+
+    // Markdown Parser
+    function parseMarkdown(md) {
+      if (!md) return '';
+      let html = md;
+
+      // Code blocks
+      html = html.replace(/```([a-zA-Z0-9_]*)\n([\s\S]*?)```/g, (match, lang, code) => {
+        const language = lang.trim() || 'code';
+        return `
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span>${escapeHtml(language.toUpperCase())}</span>
+              <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+            </div>
+            <pre><code>${escapeHtml(code.trim())}</code></pre>
+          </div>
+        `;
+      });
+
+      // Headings
+      html = html.replace(/^#### (.*$)/gim, '<h4>$1</h4>');
+      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+      // Blockquotes
+      html = html.replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>');
+
+      // Bold & Italics
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+      // Inline code
+      html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+
+      // Lists
+      html = html.replace(/^\* (.*$)/gim, '<li>$1</li>');
+      html = html.replace(/^- (.*$)/gim, '<li>$1</li>');
+      html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+      // Paragraphs
+      const paragraphs = html.split(/\n\n+/).map(p => {
+        p = p.trim();
+        if (!p) return '';
+        if (p.startsWith('<h') || p.startsWith('<div') || p.startsWith('<ul') || p.startsWith('<blockquote')) {
+          return p;
+        }
+        return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+      });
+
+      return paragraphs.join('');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Event Listeners
+    function setupEventListeners() {
+      DOM.themeToggleBtn.addEventListener('click', toggleTheme);
+
+      DOM.openSidebarBtn.addEventListener('click', openMobileSidebar);
+      DOM.closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+      DOM.sidebarBackdrop.addEventListener('click', closeMobileSidebar);
+
+      DOM.saveApiKeyBtn.addEventListener('click', saveApiKey);
+      DOM.toggleApiKeyVisibilityBtn.addEventListener('click', toggleApiKeyVisibility);
+      
+      const testApiKeyBtn = document.getElementById('testApiKeyBtn');
+      if (testApiKeyBtn) {
+        testApiKeyBtn.addEventListener('click', async () => {
+          const key = (DOM.geminiApiKeyInput.value || apiKey || '').trim();
+          if (!key) {
+            showToast('Please enter an API key first!');
+            DOM.geminiApiKeyInput.focus();
+            return;
+          }
+          testApiKeyBtn.disabled = true;
+          testApiKeyBtn.innerHTML = `<i data-lucide="loader-2" class="spin"></i> Testing...`;
+          showToast('Testing key with Gemini API...');
+          try {
+            const testReply = await callGeminiAPI('Say "Gemini connection successful!" in 5 words.', key);
+            showToast('✅ Gemini API Key is working perfectly!');
+            saveApiKey();
+          } catch (err) {
+            showToast('❌ Test failed: ' + (err.message || 'Invalid key'));
+            alert('Gemini API Error Details:\n\n' + err.message + '\n\nPlease ensure your key is copied from https://aistudio.google.com/app/apikey and has Generative Language API enabled.');
+          } finally {
+            testApiKeyBtn.disabled = false;
+            testApiKeyBtn.innerHTML = `<i data-lucide="zap" style="width:12px; height:12px; color:var(--accent-amber);"></i> <span>Test Key</span>`;
+            refreshIcons();
+          }
+        });
+      }
+
+      DOM.focusApiKeyBtn.addEventListener('click', () => {
+        DOM.geminiApiKeyInput.focus();
+        openMobileSidebar();
+      });
+
+      DOM.newChatBtn.addEventListener('click', () => {
+        startNewChat();
+        closeMobileSidebar();
+      });
+      DOM.clearAllChatsBtn.addEventListener('click', clearAllChats);
+
+      DOM.samplePromptCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const prompt = card.getAttribute('data-prompt');
+          DOM.chatTextarea.value = prompt;
+          handleSendMessage();
+        });
+      });
+
+      DOM.quickPromptBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = btn.getAttribute('data-action');
+          let text = '';
+          switch (action) {
+            case 'explain': text = 'Explain the concept of [Topic] simply with real-world examples.'; break;
+            case 'summarize': text = 'Summarize my lecture notes into key bullet points and formulas: [Paste Notes]'; break;
+            case 'quiz': text = 'Practice Quiz: Give me 3 multiple-choice questions on [Topic] with explanations.'; break;
+            case 'solve': text = 'Solve this problem step-by-step with all calculations shown: [Problem]'; break;
+          }
+          DOM.chatTextarea.value = text;
+          DOM.chatTextarea.focus();
+          DOM.chatTextarea.dispatchEvent(new Event('input'));
+          closeMobileSidebar();
+        });
+      });
+
+      DOM.chatTextarea.addEventListener('input', () => {
+        DOM.chatTextarea.style.height = 'auto';
+        DOM.chatTextarea.style.height = Math.min(DOM.chatTextarea.scrollHeight, 150) + 'px';
+        DOM.sendBtn.disabled = DOM.chatTextarea.value.trim().length === 0;
+      });
+
+      DOM.chatTextarea.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if (!DOM.sendBtn.disabled) {
+            handleSendMessage();
+          }
+        }
+      });
+
+      DOM.sendBtn.addEventListener('click', handleSendMessage);
+
+      // Student Profile Registration & Edit Listeners
+      if (DOM.studentEntryForm) {
+        DOM.studentEntryForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = DOM.studentNameInput.value.trim();
+          const school = DOM.studentSchoolInput.value.trim();
+          const className = DOM.studentClassInput.value.trim();
+          const rollNo = DOM.studentRollInput.value.trim();
+
+          if (!name || !school || !className || !rollNo) {
+            showToast('Please fill all required student details!');
+            return;
+          }
+
+          saveStudentProfile({
+            name: name,
+            school: school,
+            class: className,
+            rollNo: rollNo
+          });
+        });
+      }
+
+      // Quick Class Selection Pills
+      if (DOM.quickClassPills) {
+        DOM.quickClassPills.querySelectorAll('.class-pill').forEach(pill => {
+          pill.addEventListener('click', () => {
+            DOM.studentClassInput.value = pill.getAttribute('data-val');
+            DOM.quickClassPills.querySelectorAll('.class-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+          });
+        });
+      }
+
+      // Continue as Guest Learner
+      if (DOM.guestContinueBtn) {
+        DOM.guestContinueBtn.addEventListener('click', () => {
+          saveStudentProfile({
+            name: 'Student Learner',
+            school: 'Academic High School',
+            class: 'Class 10th',
+            rollNo: 'Guest-101'
+          });
+        });
+      }
+
+      // Edit Profile Buttons
+      if (DOM.editStudentProfileBtn) {
+        DOM.editStudentProfileBtn.addEventListener('click', () => {
+          openStudentPortal();
+          closeMobileSidebar();
+        });
+      }
+
+      if (DOM.studentHeaderBadge) {
+        DOM.studentHeaderBadge.addEventListener('click', () => {
+          openStudentPortal();
+        });
+      }
+    }
+
+    function openMobileSidebar() {
+      DOM.sidebar.classList.add('open');
+      DOM.sidebarBackdrop.classList.add('active');
+    }
+
+    function closeMobileSidebar() {
+      DOM.sidebar.classList.remove('open');
+      DOM.sidebarBackdrop.classList.remove('active');
+    }
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      DOM.toastText.textContent = msg;
+      DOM.toastNotification.classList.remove('hidden');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        DOM.toastNotification.classList.add('hidden');
+      }, 2800);
+    }
+  </script>
+</body>
+</html>
